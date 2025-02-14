@@ -21,7 +21,7 @@ Route::get('/posts/{id}', function($id){
 })->where('id', '[0-9]+');
 
 Route::get('/search', function(Request $request){
- return $request->name . ' ' . $request->city;
+	return $request->name . ' ' . $request->city;
 });
 
 // Route::get('/posts', function(){
@@ -41,6 +41,13 @@ Route::get('/', [ListingController::class, 'index']);
 
 // Show Create Form
 Route::get('/listings/create', [ListingController::class, 'create']);
+
+// Store a New Listing
+Route::post('/listings', [ListingController::class, 'store']);
+
+
+// Show Edit Form
+Route::get('/listings/{listing}/edit', ListingController::class, 'edit');
 
 // Single Listings
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
