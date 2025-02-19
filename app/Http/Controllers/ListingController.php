@@ -51,8 +51,34 @@ class ListingController extends Controller
 
 	// Show Edit Form
 	public function edit(Listing $listing){
-	    return view('listings.edit', [
-            'listing' => $listing
-        ]);}
+		return view('listings.edit', [
+			'listing' => $listing
+		]);
+	}
+
+	// Edit Listing Form
+	public function update(Request $request, $id)
+	{
+		// Validate the incoming request data
+		$validatedData = $request->validate([
+			'title' => 'required|string|max:255',
+			'company' => ['required', Rule::unique('listings', 'company')],
+			'location' => 'required',
+			'website' => 'required',
+			'email' => ['required', 'email'],
+			'tags' => 'required',
+			'description' => 'required|string',
+		]);
+
+		// Find the listing by ID
+		$listing = Listing::findOrFail($id);
+
+		// Update the listing with validated data
+		$listing->update($validatedData);
+
+		// Redirect or return a response as needed
+		return redirect()->route('listings.show', $listing->id)
+						 ->with('success', 'Listing updated successfully.');
+	}
 }
 
